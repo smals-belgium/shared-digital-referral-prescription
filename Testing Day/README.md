@@ -23,7 +23,7 @@ The **UHMEP technical team** is available throughout the day to support you in y
 
 1. On arrival, please **[fill out the Testing Onboarding form](https://github.com/smals-belgium/shared-digital-referral-prescription/blob/master/Testing%20Day/RIZIV-DRP-testing-day-onboarding-form.docx)** and send it to:  
    📧 `Support-Uhmep@smals.be`
-2. Based on your form, you'll be assigned to a workshop matching your **target DRP components** and your **goals for the day**.
+2. Based on your form, you'll be assigned to a workshop timeslot matching your **target DRP components** (webapp, web components or FHIR REST API) and your **goals for the day**.
 
 ---
 
