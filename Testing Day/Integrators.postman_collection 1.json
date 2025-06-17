@@ -1,0 +1,1436 @@
+{
+	"info": {
+		"_postman_id": "6710d2c2-c810-4472-8dfb-30d6716ae506",
+		"name": "Integrators",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "eHealth token",
+			"item": [
+				{
+					"name": "Get code - URL ACC HCP",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "https://api-acpt.ehealth.fgov.be/auth/realms/healthcare/protocol/openid-connect/auth?client_id=nihdi-uhmep-hcp&redirect_uri=https://extranet-acpt.referral-prescription.ehealth.fgov.be/&response_type=code&scope=openid&nonce=test1234",
+							"protocol": "https",
+							"host": [
+								"api-acpt",
+								"ehealth",
+								"fgov",
+								"be"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"healthcare",
+								"protocol",
+								"openid-connect",
+								"auth"
+							],
+							"query": [
+								{
+									"key": "client_id",
+									"value": "nihdi-uhmep-hcp"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://extranet-acpt.referral-prescription.ehealth.fgov.be/"
+								},
+								{
+									"key": "response_type",
+									"value": "code"
+								},
+								{
+									"key": "scope",
+									"value": "openid"
+								},
+								{
+									"key": "nonce",
+									"value": "test1234"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Code to token - ACC HCP",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set('notExchangedAccessToken',pm.response.json().access_token);\r",
+									"pm.environment.set('refreshToken',pm.response.json().refresh_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "authorization_code",
+									"type": "default"
+								},
+								{
+									"key": "client_id",
+									"value": "nihdi-uhmep-hcp",
+									"type": "default"
+								},
+								{
+									"key": "redirect_uri",
+									"value": "https://extranet-acpt.referral-prescription.ehealth.fgov.be/",
+									"type": "default"
+								},
+								{
+									"key": "code",
+									"value": "06c3108c-9ab6-4a0c-bc33-e2477118195c.743daa4d-a273-4e46-b752-e772adcf2813.ec56fc1d-c985-4679-8763-5b8965350998",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://api-acpt.ehealth.fgov.be/auth/realms/healthcare/protocol/openid-connect/token",
+							"protocol": "https",
+							"host": [
+								"api-acpt",
+								"ehealth",
+								"fgov",
+								"be"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"healthcare",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Token exchange - ACC HCP",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set('exchangedAccessToken',pm.response.json().access_token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "subject_token_type",
+									"value": "urn:ietf:params:oauth:token-type:access_token",
+									"type": "default"
+								},
+								{
+									"key": "requested_token_type",
+									"value": "urn:ietf:params:oauth:token-type:access_token",
+									"type": "default"
+								},
+								{
+									"key": "grant_type",
+									"value": "urn:ietf:params:oauth:grant-type:token-exchange",
+									"type": "default"
+								},
+								{
+									"key": "audience",
+									"value": "nihdi-uhmep-fhir-hcp",
+									"type": "default"
+								},
+								{
+									"key": "client_id",
+									"value": "nihdi-uhmep-hcp",
+									"type": "default"
+								},
+								{
+									"key": "subject_token",
+									"value": "{{notExchangedAccessToken}}",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://api-acpt.ehealth.fgov.be/auth/realms/healthcare/protocol/openid-connect/token",
+							"protocol": "https",
+							"host": [
+								"api-acpt",
+								"ehealth",
+								"fgov",
+								"be"
+							],
+							"path": [
+								"auth",
+								"realms",
+								"healthcare",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pseudo",
+			"item": [
+				{
+					"name": "Get domains - ACC",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{notExchangedAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api-acpt.ehealth.fgov.be/pseudo/v1/domains",
+							"protocol": "https",
+							"host": [
+								"api-acpt",
+								"ehealth",
+								"fgov",
+								"be"
+							],
+							"path": [
+								"pseudo",
+								"v1",
+								"domains"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get specific domain - ACC",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{notExchangedAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api-acpt.ehealth.fgov.be/pseudo/v1/domains/uhmep_v1",
+							"protocol": "https",
+							"host": [
+								"api-acpt",
+								"ehealth",
+								"fgov",
+								"be"
+							],
+							"path": [
+								"pseudo",
+								"v1",
+								"domains",
+								"uhmep_v1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Pseudonymize EC point - ACC",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"responseBody = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"x\", responseBody.x);\r",
+									"pm.environment.set(\"y\", responseBody.y);\r",
+									"pm.environment.set(\"transitInfo\", responseBody.transitInfo);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{notExchangedAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"c59756c6-3aab-4ecc-83c9-f271d98ac58a\",\r\n    \"crv\": \"P-521\",\r\n    \"x\": \"ALDSOQoEbRGKTsiFq5mLqoKGBYUeWz+18KOa35Pm1reh+x9EETINYJJm1fqa54Dbyr0nNOPA6ycVUJ8XSIxwmfcl\",\r\n    \"y\": \"ARjQ2GZD/rzNC1y18EYgdfdaMoShGQIVvifw/62SNXARssErhLZeqdQaxsrjt45RELz1NeQLxoxbMnSveDFQ3mf5\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api-acpt.ehealth.fgov.be/pseudo/v1/domains/uhmep_v1/pseudonymize",
+							"protocol": "https",
+							"host": [
+								"api-acpt",
+								"ehealth",
+								"fgov",
+								"be"
+							],
+							"path": [
+								"pseudo",
+								"v1",
+								"domains",
+								"uhmep_v1",
+								"pseudonymize"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Identify pseudo in transit - ACC",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{notExchangedAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"05d61f92-f8bd-4313-8463-acef88c1bfc8\",\r\n    \"crv\": \"P-521\",\r\n    \"x\": \"{{x}}\",\r\n    \"y\": \"{{y}}\",\r\n    \"transitInfo\": \"{{transitInfo}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api-acpt.ehealth.fgov.be/pseudo/v1/domains/uhmep_v1/identify",
+							"protocol": "https",
+							"host": [
+								"api-acpt",
+								"ehealth",
+								"fgov",
+								"be"
+							],
+							"path": [
+								"pseudo",
+								"v1",
+								"domains",
+								"uhmep_v1",
+								"identify"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "UHMEP",
+			"item": [
+				{
+					"name": "Create a prescription",
+					"item": [
+						{
+							"name": "Create a prescription",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"/* MUST BE MODIFIED with your information */\r",
+											"\r",
+											"subjectPseudonym = \"ew0KICAiaWQiIDogbnVsbCwNCiAgImRvbWFpbiIgOiAidWhtZXBfdjEiLA0KICAiY3J2IiA6IG51bGwsDQogICJpYXQiIDogMTczMjIwNDIyOSwNCiAgImV4cCIgOiAxNzMyMjA0ODI5LA0KICAieCIgOiAiQU9LdDFzWUQyLzN3bi9PUk10QisrQnl3YnZBZVJ5SXlJR1c1QXZWcFVOYk9QSW5xY3RMcmRZZ1NOSnpzNGpLd1BtWGJzY0FIKytXK3pjMTJFLzVWR243bSIsDQogICJ5IiA6ICJBWEVRa2l2RVpkQnJkSUlkaVliejJCMEZlcXN2NC9UT3JhSHB6eXJTOCtFTUZ3YXVZRFlkYUZNazZVamxSdnFhSW91ZXJTRXk1TmRObFY4MVk4UDFmeFRNIiwNCiAgInRyYW5zaXRJbmZvIiA6ICJleUpoZFdRaU9pSm9kSFJ3Y3pvdkwyRndhUzFoWTNCMExtVm9aV0ZzZEdndVptZHZkaTVpWlM5d2MyVjFaRzh2ZGpFdlpHOXRZV2x1Y3k5MWFHMWxjRjkyTVNJc0ltVnVZeUk2SWtFeU5UWkhRMDBpTENKbGVIQWlPakUzTXpJeU1EUTRNamtzSW1saGRDSTZNVGN6TWpJd05ESXlPU3dpWVd4bklqb2laR2x5SWl3aWEybGtJam9pTmpBMlpETTBZVEF0T0RJNVl5MDBNVEF6TFdFd1l6UXRaVFZsT1RkaE1UVTNOR0l4SW4wLi5TcUhwdklVRU56b29NS3BZLm1rZ3BZWnRBd0lKZjBuYWxPQkdSTmVDQ1BFOG1qR3NlaHcySVl4ZHF0NWlhTVRMeWhCLWtXbmdQbTNpSUw1MG5qNldsd3AwUVhRNThPRHBpc1A1YWlWdmdWUE1CU1RIamJ4TVJYVXdFNER5MkFRQUxTb0dHZWdHMWhON2RmbkxrMlIzenFrSnpBa0ZiQXE0djFmSjlEOEJxdk8zblg1T3N5LXVLeWI1OEFONnJ1Tk14LTI0Ui41QXkxYWhfdTFrRzQwdkVsYnBpS2J3IiwNCiAgImluUmVzcG9uc2VUbyIgOiBudWxsDQp9\";\r",
+											"\r",
+											"pm.environment.set('requesterSsin', \"97xxxxxxxxx\");\r",
+											"pm.environment.set('requesterDiscipline', \"PHYSICIAN\");\r",
+											"\r",
+											"pm.environment.set('subjectSsin', \"urn:be:fgov:ehealth:pseudo:v1:\" + subjectPseudonym);\r",
+											"\r",
+											"/* Setting some values for the request */\r",
+											"\r",
+											"date = new Date();\r",
+											"\r",
+											"recordedDate = date.toISOString();\r",
+											"validationStartDate = recordedDate.split('T')[0];\r",
+											"\r",
+											"date.setDate(date.getDate() + 30);\r",
+											"\r",
+											"validationEndDate = date.toISOString().split('T')[0];\r",
+											"treatmentValidationEndDate = validationEndDate;\r",
+											"\r",
+											"pm.environment.set('recordedDate', recordedDate);\r",
+											"pm.environment.set('validationStartDate', validationStartDate);\r",
+											"pm.environment.set('validationEndDate', validationEndDate);\r",
+											"pm.environment.set('treatmentValidationEndDate', treatmentValidationEndDate);\r",
+											"\r",
+											"pm.environment.set('status', \"active\");\r",
+											"pm.environment.set('intent', \"order\");\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"\r",
+											"    var location = pm.response.headers.get(\"Location\");\r",
+											"    var locationList = location.split(\"/\");\r",
+											"    var serviceRequestID = locationList[locationList.length - 1]\r",
+											"\r",
+											"    pm.environment.set('serviceRequestID', serviceRequestID);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"content-type": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{exchangedAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/fhir+json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"resourceType\": \"ServiceRequest\",\r\n    \"meta\": {\r\n        \"profile\": [\r\n            \"https://www.ehealth.fgov.be/standards/fhir/referral/StructureDefinition/be-referralprescription\"\r\n        ]\r\n    },\r\n    \"extension\": [\r\n        {\r\n            \"url\": \"https://www.ehealth.fgov.be/standards/fhir/referral/StructureDefinition/be-ext-feedback-to-prescriber\",\r\n            \"valueBoolean\": false\r\n        },\r\n        {\r\n            \"url\": \"https://www.ehealth.fgov.be/standards/fhir/referral/StructureDefinition/be-ext-latest-end-date\",\r\n            \"valueDateTime\": \"{{treatmentValidationEndDate}}\"\r\n        },\r\n        {\r\n            \"url\": \"https://www.ehealth.fgov.be/standards/fhir/referral/StructureDefinition/be-ext-validity-period\",\r\n            \"valuePeriod\": {\r\n                \"start\": \"{{validationStartDate}}\",\r\n                \"end\": \"{{validationEndDate}}\"\r\n            }\r\n        }\r\n    ],\r\n    \"status\": \"active\",\r\n    \"intent\": \"order\",\r\n    \"category\": [\r\n        {\r\n            \"coding\": [\r\n                {\r\n                    \"system\": \"http://snomed.info/sct\",\r\n                    \"code\": \"9632001\"\r\n                }\r\n            ]\r\n        }\r\n    ],\r\n    \"code\": {\r\n        \"coding\": [\r\n            {\r\n                \"system\": \"http://snomed.info/sct\",\r\n                \"code\": \"385805005\"\r\n            }\r\n        ]\r\n    },\r\n    \"orderDetail\": [\r\n        {\r\n            \"coding\": [\r\n                {\r\n                    \"system\": \"http://snomed.info/sct\",\r\n                    \"code\": \"337414009\"\r\n                }\r\n            ]\r\n        },\r\n        {\r\n            \"coding\": [\r\n                {\r\n                    \"system\": \"https://www.ehealth.fgov.be/standards/fhir/referral/CodeSystem/be-cs-temp-requested-service-detail\",\r\n                    \"code\": \"tmp-indi-sion-8\"\r\n                }\r\n            ]\r\n        }\r\n    ],\r\n    \"subject\": {\r\n        \"identifier\": {\r\n            \"use\": \"official\",\r\n            \"system\": \"https://www.ehealth.fgov.be/standards/fhir/NamingSystem/ssin\",\r\n            \"value\": \"{{subjectSsin}}\",\r\n            \"_value\": {\r\n                \"extension\": [\r\n                    {\r\n                        \"extension\": [\r\n                            {\r\n                                \"url\": \"marker\",\r\n                                \"valueBoolean\": true\r\n                            }\r\n                        ],\r\n                        \"url\": \"https://www.ehealth.fgov.be/standards/fhir/infsec/StructureDefinition/be-ext-pseudonymization\"\r\n                    }\r\n                ]\r\n            }\r\n        }\r\n    },\r\n    \"occurrenceTiming\":{\r\n        \"repeat\": {\r\n            \"frequency\": 1,\r\n            \"period\": 1,\r\n            \"periodUnit\": \"wk\"\r\n        }\r\n    },\r\n    \"authoredOn\": \"{{recordedDate}}\",\r\n    \"requester\": {\r\n        \"reference\": \"PractitionerRole/{{requesterSsin}}-{{requesterDiscipline}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{hostUrlFhirGateway}}/ServiceRequest",
+									"host": [
+										"{{hostUrlFhirGateway}}"
+									],
+									"path": [
+										"ServiceRequest"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a prescription",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var responseBody;\r",
+											"\r",
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{exchangedAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{hostUrlFhirGateway}}/ServiceRequest/{{serviceRequestID}}",
+									"host": [
+										"{{hostUrlFhirGateway}}"
+									],
+									"path": [
+										"ServiceRequest",
+										"{{serviceRequestID}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Start a treatment (POST)",
+					"item": [
+						{
+							"name": "Start a treatment TASK",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"/* MUST BE MODIFIED with your information */\r",
+											"\r",
+											"pm.environment.set('practitionerSsin', \"97xxxxxxxxx\");\r",
+											"pm.environment.set('practitionerDiscipline', \"NURSE\");\r",
+											"\r",
+											"/* Setting some values for the request */\r",
+											"\r",
+											"date = new Date();\r",
+											"\r",
+											"recordedDate = date.toISOString().split('T')[0];\r",
+											"startExecutionDate = recordedDate;\r",
+											"\r",
+											"executionPeriod = JSON.stringify({\r",
+											"    \"start\": startExecutionDate\r",
+											"});\r",
+											"\r",
+											"pm.environment.set('recordedDate', recordedDate);\r",
+											"pm.environment.set('executionPeriod', executionPeriod);\r",
+											"\r",
+											"pm.environment.set('status', \"in-progress\");\r",
+											"pm.environment.set('intent', \"order\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 201\", function () {\r",
+											"    pm.response.to.have.status(201);\r",
+											"\r",
+											"    var location = pm.response.headers.get(\"Location\");\r",
+											"    var locationList = location.split(\"/\");\r",
+											"    var performerTaskID = locationList[locationList.length - 1]\r",
+											"\r",
+											"    pm.environment.set('performerTaskID', performerTaskID)\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"content-type": true
+								}
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{exchangedAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/fhir+json",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"resourceType\": \"Task\",\r\n    \"meta\": {\r\n        \"profile\": [\r\n            \"https://www.ehealth.fgov.be/standards/fhir/referral/StructureDefinition/be-performer-task\"\r\n        ]\r\n    },\r\n    \"partOf\": {\r\n        \"reference\": \"Task/{{serviceRequestID}}\"\r\n    },\r\n    \"focus\": {\r\n         \"reference\": \"ServiceRequest/{{serviceRequestID}}\"\r\n    },\r\n    \"status\": \"{{status}}\",\r\n    \"intent\": \"{{intent}}\",\r\n    \"executionPeriod\": {{executionPeriod}},\r\n    \"authoredOn\": \"{{recordedDate}}\",\r\n    \"owner\": {\r\n        \"reference\":\"PractitionerRole/{{practitionerSsin}}-{{practitionerDiscipline}}\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{hostUrlFhirGateway}}/Task",
+									"host": [
+										"{{hostUrlFhirGateway}}"
+									],
+									"path": [
+										"Task"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a prescription",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{exchangedAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{hostUrlFhirGateway}}/ServiceRequest/{{serviceRequestID}}",
+									"host": [
+										"{{hostUrlFhirGateway}}"
+									],
+									"path": [
+										"ServiceRequest",
+										"{{serviceRequestID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get beReferralTask profile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    responseBody = pm.response.json();\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{exchangedAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{hostUrlFhirGateway}}/Task?focus={{serviceRequestID}}&_profile=Profile/be-referral-task",
+									"host": [
+										"{{hostUrlFhirGateway}}"
+									],
+									"path": [
+										"Task"
+									],
+									"query": [
+										{
+											"key": "focus",
+											"value": "{{serviceRequestID}}"
+										},
+										{
+											"key": "_profile",
+											"value": "Profile/be-referral-task"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get bePerformerTasks Profile",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"    responseBody = pm.response.json();\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{exchangedAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{hostUrlFhirGateway}}/Task?focus={{serviceRequestID}}&_profile=Profile/be-performer-task",
+									"host": [
+										"{{hostUrlFhirGateway}}"
+									],
+									"path": [
+										"Task"
+									],
+									"query": [
+										{
+											"key": "focus",
+											"value": "{{serviceRequestID}}"
+										},
+										{
+											"key": "_profile",
+											"value": "Profile/be-performer-task"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a performer task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{exchangedAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{hostUrlFhirGateway}}/Task/{{performerTaskID}}",
+									"host": [
+										"{{hostUrlFhirGateway}}"
+									],
+									"path": [
+										"Task",
+										"{{performerTaskID}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Finish a treatment (PATCH)",
+					"item": [
+						{
+							"name": "Finish a treatment TASK",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"date = new Date();\r",
+											"\r",
+											"executionEndDate = date.toISOString().split('T')[0];\r",
+											"\r",
+											"pm.environment.set('executionEndDate', executionEndDate);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{exchangedAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/fhir+json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"resourceType\": \"Parameters\",\r\n    \"parameter\": [\r\n        {\r\n            \"name\": \"operation\",\r\n            \"part\": [\r\n                {\r\n                    \"name\": \"type\",\r\n                    \"valueCode\": \"add\"\r\n                },\r\n                {\r\n                    \"name\": \"path\",\r\n                    \"valueString\": \"Task.executionPeriod\"\r\n                },\r\n                {\r\n                    \"name\": \"name\",\r\n                    \"valueString\": \"end\"\r\n                },\r\n                {\r\n                    \"name\": \"value\",\r\n                    \"valueDateTime\":\"{{executionEndDate}}\"\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{hostUrlFhirGateway}}/Task/{{performerTaskID}}",
+									"host": [
+										"{{hostUrlFhirGateway}}"
+									],
+									"path": [
+										"Task",
+										"{{performerTaskID}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get a performer task",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{exchangedAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{hostUrlFhirGateway}}/Task/{{performerTaskID}}",
+									"host": [
+										"{{hostUrlFhirGateway}}"
+									],
+									"path": [
+										"Task",
+										"{{performerTaskID}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Consult list prescriptions",
+					"item": [
+						{
+							"name": "For patient",
+							"item": [
+								{
+									"name": "Prescriptions list",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});"
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"/* MUST BE MODIFIED with your information */\r",
+													"\r",
+													"subjectPseudonym = \"ew0KICAiaWQiIDogbnVsbCwNCiAgImRvbWFpbiIgOiAidWhtZXBfdjEiLA0KICAiY3J2IiA6IG51bGwsDQogICJpYXQiIDogMTczMjExNjcyMCwNCiAgImV4cCIgOiAxNzMyMTE3MzIwLA0KICAieCIgOiAiQVQwN1d0T0wyTDJnZWRKTFc5K04yMHNsT2J5TTZiTW8zazUrWVBiSGlVc0xkWGRxYkRoS2Vmdmo4N0NnS2NHVjIzby9CelMwWEFOa3NWaG5DRUtsSkQ1MSIsDQogICJ5IiA6ICJBWnFFb0ZVRmEvK1hrblpJTVR1aFFQc09xU0FTc1FPZGRmMlBTU0VUWk5vMUZWUklncWFTcFRTQlJadXZFUUxYYldNNHdnRUQ1VEVJbGFubmZZWGl1aHFBIiwNCiAgInRyYW5zaXRJbmZvIiA6ICJleUpoZFdRaU9pSm9kSFJ3Y3pvdkwyRndhUzFoWTNCMExtVm9aV0ZzZEdndVptZHZkaTVpWlM5d2MyVjFaRzh2ZGpFdlpHOXRZV2x1Y3k5MWFHMWxjRjkyTVNJc0ltVnVZeUk2SWtFeU5UWkhRMDBpTENKbGVIQWlPakUzTXpJeE1UY3pNakFzSW1saGRDSTZNVGN6TWpFeE5qY3lNQ3dpWVd4bklqb2laR2x5SWl3aWEybGtJam9pTmpWaU5EaGhZbUl0TjJNellTMDBNVEZqTFRrek1qa3RZV1ZtWm1KbE5UZGhNekV6SW4wLi5pUHVGZmlaUFB4aF9pN1NaLnZ4LXNGeW5VdWg4QlNfOWc5Uld6YWJ1OTg1azAwVjV2OEQ2N2ttUlRISnNNc2FQZFktaC1VdGdDRXhBT3pNRHlEbXE1a1p6VmRkVFhGMzFKTE9vQ0x1bjJwY0ZkLTJxd1BnRl90bHp0UGZ3TG45WjY1WENLYzZYcXZOeEZFcWlQOUtYX3g5NWdkQkNTVFpxel81VXBLRVliclNaQVJOalpPNlNzUG1pZzNvbmlwb1MwVnZyNi5DUXIwb3ZBTzB3ek4teURLUHVPeGJ3IiwNCiAgImluUmVzcG9uc2VUbyIgOiBudWxsDQp9\";\r",
+													"\r",
+													"pm.environment.set('requesterSsin', \"97xxxxxxxxx\");\r",
+													"\r",
+													"pm.environment.set('subjectSsin', \"urn:be:fgov:ehealth:pseudo:v1:\" + subjectPseudonym);\r",
+													"\r",
+													"/* Setting some values for the request */\r",
+													"\r",
+													"pm.environment.set(\"offset\", 0);\r",
+													"pm.environment.set(\"count\", 25);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{exchangedAccessToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "patient",
+													"value": "{{subjectSsin}}",
+													"type": "text"
+												},
+												{
+													"key": "_count",
+													"value": "{{count}}",
+													"type": "default"
+												},
+												{
+													"key": "_offset",
+													"value": "{{offset}}",
+													"type": "default"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{hostUrlFhirGateway}}/ServiceRequest/_search",
+											"host": [
+												"{{hostUrlFhirGateway}}"
+											],
+											"path": [
+												"ServiceRequest",
+												"_search"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "By Requester",
+							"item": [
+								{
+									"name": "Prescriptions list",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"/* MUST BE MODIFIED with your information */\r",
+													"\r",
+													"pm.environment.set('requesterSsin', \"97xxxxxxxxx\");\r",
+													"pm.environment.set('requesterDiscipline', \"PHYSICIAN\");\r",
+													"\r",
+													"/* Setting some values for the request */\r",
+													"\r",
+													"pm.environment.set(\"offset\", 0);\r",
+													"pm.environment.set(\"count\", 25);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{exchangedAccessToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "requester",
+													"value": "PractitionerRole/{{requesterSsin}}-{{requesterDiscipline}}",
+													"type": "text"
+												},
+												{
+													"key": "_count",
+													"value": "{{count}}",
+													"type": "default"
+												},
+												{
+													"key": "_offset",
+													"value": "{{offset}}",
+													"type": "default"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{hostUrlFhirGateway}}/ServiceRequest/_search",
+											"host": [
+												"{{hostUrlFhirGateway}}"
+											],
+											"path": [
+												"ServiceRequest",
+												"_search"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "For performer",
+							"item": [
+								{
+									"name": "Prescriptions list",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Status code is 200\", function () {\r",
+													"    pm.response.to.have.status(200);\r",
+													"});\r",
+													""
+												],
+												"type": "text/javascript"
+											}
+										},
+										{
+											"listen": "prerequest",
+											"script": {
+												"exec": [
+													"/* MUST BE MODIFIED with your information */\r",
+													"\r",
+													"pm.environment.set('practitionerSsin', \"97xxxxxxxxx\");\r",
+													"pm.environment.set('practitionerDiscipline', \"NURSE\");\r",
+													"\r",
+													"/* Setting some values for the request */\r",
+													"\r",
+													"pm.environment.set(\"offset\", 0);\r",
+													"pm.environment.set(\"count\", 25);"
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"protocolProfileBehavior": {
+										"disabledSystemHeaders": {}
+									},
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{exchangedAccessToken}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "urlencoded",
+											"urlencoded": [
+												{
+													"key": "_has:Task:focus:owner",
+													"value": "PractitionerRole/{{practitionerSsin}}-{{practitionerDiscipline}}",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{hostUrlFhirGateway}}/ServiceRequest/_search",
+											"host": [
+												"{{hostUrlFhirGateway}}"
+											],
+											"path": [
+												"ServiceRequest",
+												"_search"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						}
+					]
+				},
+				{
+					"name": "Consult all resources (graph operation)",
+					"item": [
+						{
+							"name": "Consult all resources (graph operation)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{exchangedAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{hostUrlFhirGateway}}/ServiceRequest/{{serviceRequestID}}/$graph?graph=https://www.ehealth.fgov.be/standards/fhir/referral/GraphDefinition/full-referral-prescription",
+									"host": [
+										"{{hostUrlFhirGateway}}"
+									],
+									"path": [
+										"ServiceRequest",
+										"{{serviceRequestID}}",
+										"$graph"
+									],
+									"query": [
+										{
+											"key": "graph",
+											"value": "https://www.ehealth.fgov.be/standards/fhir/referral/GraphDefinition/full-referral-prescription"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.environment.set('caregiverDiscipline', \"NURSE\");",
+							"pm.environment.set('prescriberDiscipline', 'PHYSICIAN');"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"utilFunctions = {",
+					"    sec1: function (x, y) {",
+					"        let xBytes = utilFunctions.toArrayLike(x);",
+					"        let yBytes = utilFunctions.toArrayLike(y);",
+					" ",
+					"        const out = new Uint8Array(1 + 66 + 66);",
+					"        console.log(xBytes.length)",
+					"        out[0] = 4;",
+					"        out.set(xBytes, 1 + 66 - xBytes.length);",
+					"        out.set(yBytes, 1 + 66 + 66 - yBytes.length);",
+					" ",
+					"        return Base64.urlEncode(out);",
+					"    },",
+					"    toArrayLike: function(point) {",
+					"        ArrayType = Buffer;",
+					"        endian = \"be\"",
+					" ",
+					"        console.log(typeof point);",
+					"        utilFunctions.strip(point);",
+					"",
+					"        var byteLength = utilFunctions.byteLength(point);",
+					"        var reqLength = Math.max(1, byteLength);",
+					"    ",
+					"        var res = utilFunctions.allocate(ArrayType, reqLength);",
+					"        utilFunctions.toArrayLikebe(res, byteLength);",
+					"",
+					"        return res;",
+					"    },",
+					"    allocate: function(ArrayType, size) {",
+					"        if (ArrayType.allocUnsafe) {",
+					"            return ArrayType.allocUnsafe(size);",
+					"        }",
+					"        return new ArrayType(size);",
+					"    },",
+					"    toArrayLikebe: function(res, byteLength) {",
+					"        var position = res.length - 1;",
+					"    var carry = 0;",
+					" ",
+					"    for (var i = 0, shift = 0; i < this.length; i++) {",
+					"      var word = (this.words[i] << shift) | carry;",
+					" ",
+					"      res[position--] = word & 0xff;",
+					"      if (position >= 0) {",
+					"        res[position--] = (word >> 8) & 0xff;",
+					"      }",
+					"      if (position >= 0) {",
+					"        res[position--] = (word >> 16) & 0xff;",
+					"      }",
+					" ",
+					"      if (shift === 6) {",
+					"        if (position >= 0) {",
+					"          res[position--] = (word >> 24) & 0xff;",
+					"        }",
+					"        carry = 0;",
+					"        shift = 0;",
+					"      } else {",
+					"        carry = word >>> 24;",
+					"        shift += 2;",
+					"      }",
+					"    }",
+					" ",
+					"    if (position >= 0) {",
+					"      res[position--] = carry;",
+					" ",
+					"      while (position >= 0) {",
+					"        res[position--] = 0;",
+					"      }",
+					"    }",
+					"    },",
+					"    strip: function(point) {",
+					"        while (point.length > 1 && point.words[point.length - 1] === 0) {",
+					"            point.length--;",
+					"        }",
+					"        return utilFunctions.normSign(point);",
+					"    },",
+					"    byteLength: function(point) {",
+					"        return Math.ceil(utilFunctions.bitLength(point) / 8);",
+					"    },",
+					"    bitLength: function(point) {",
+					"        var w = point.words[point.length - 1];",
+					"        var hi = utilFunctions.countBits(w);",
+					"        return (point.length - 1) * 26 + hi;",
+					"    },",
+					"    normSign: function(point) {",
+					"        // -0 = 0",
+					"        if (point.length === 1 && point.words[0] === 0) {",
+					"            point.negative = 0;",
+					"        }",
+					"        return point;",
+					"    },",
+					"    countBits: function(w) {",
+					"        if (Math.clz32) {",
+					"            return 32 - Math.clz32(w); ",
+					"        } else {",
+					"            var t = w;",
+					"            var r = 0;",
+					"            if (t >= 0x1000) {",
+					"                r += 13;",
+					"                t >>>= 13;",
+					"            }",
+					"            if (t >= 0x40) {",
+					"                r += 7;",
+					"                t >>>= 7;",
+					"            }",
+					"            if (t >= 0x8) {",
+					"                r += 4;",
+					"                t >>>= 4;",
+					"            }",
+					"            if (t >= 0x02) {",
+					"                r += 2;",
+					"                t >>>= 2;",
+					"            }",
+					"            return r + t;",
+					"            };",
+					"    }",
+					"}"
+				]
+			}
+		}
+	]
+}
