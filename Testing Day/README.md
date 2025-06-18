@@ -42,6 +42,9 @@ The **UHMEP technical team** is available throughout the day to support you in y
 - 📦 **[Pseudonymization - JS. library](https://github.com/smals-belgium/shared-pseudo-helper-js)**
 - 🔗 **[Therapeutic Link in ACC](https://wwwacc.myhealth.belgium.be/my/care-and-support/relationships)**
 - 🔐 **[Informed Consent in ACC](https://wwwacc.myhealth.belgium.be/my/care-and-support/consent)**
+- 🩺**[Professional WebApp](https://wwwacc.referral-prescription.ehealth.fgov.be/frontend/app/hcp/)**
+- 👥**[Patient WebApp](https://wwwacc.referral-prescription.ehealth.fgov.be/frontend/app/patient/)
+
 
 ---
 
