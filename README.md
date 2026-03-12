@@ -5,8 +5,8 @@ Welcome! This repository contains the key documentation for using and integratin
 ### Documentation & Resources
 
 *   **[UHMEP API Cookbook](./UHMEP_API_cookbook.pdf)**
-    *   Version: 1.0
-    *   Last Updated: 17-02-26
+    *   Version: 1.1
+    *   Last Updated: 12-03-26
 
 *   **[UHMEP API Error Codes](./UHMEP_API_ErrorCodes.xlsx)**
     *   Version: 0.5
