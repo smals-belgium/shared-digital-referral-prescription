@@ -1,6 +1,6 @@
 # Digital Referral Prescription Project
 
-Welcome! This repository contains the key documentation for using and integrating with DRP Project (UHMEP).
+Welcome! This repository contains the key documentation for using and integrating with eReferral (UHMEP).
 
 ### Documentation & Resources
 
@@ -12,6 +12,6 @@ Welcome! This repository contains the key documentation for using and integratin
     *   Version: 0.5
     *   Last Updated: 27-02-26
 
-* **[Integration Guide](./UHMEP_Integration_guide_2.0.pdf)**
+* **[Integration Guide](./UHMEP_Integration_guide.pdf)**
     *   Version: 3.0
     *   Last Updated: 26-03-2026
