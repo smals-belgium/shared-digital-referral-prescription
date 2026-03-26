@@ -13,5 +13,5 @@ Welcome! This repository contains the key documentation for using and integratin
     *   Last Updated: 27-02-26
 
 * **[Integration Guide](./UHMEP_Integration_guide_2.0.pdf)**
-    *   Version: 2.0
-    *   Last Updated: 11-09-25
+    *   Version: 3.0
+    *   Last Updated: 26-03-2026
